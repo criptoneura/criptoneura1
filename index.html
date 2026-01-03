@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Verificación de Google -->
+    <meta name="google-site-verification" content="google419a16dad97aed26" />
+    
+    <title>CRIPTONEURA | Terminal de Inteligencia Financiera, IA y Bitcoin</title>
+    
+    <meta name="description" content="Análisis diario de Bitcoin, geopolítica, IA y metales preciosos. Accede a la terminal de inteligencia de Criptoneura para datos reales sin censura.">
+    
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --accent: #ff3300; --gold: #ffd700; --bg: #1a1c20; 
+            --card-bg: #24272d; --border: #333; --text-main: #e0e0e0;
+        }
+        body { font-family: 'Inter', sans-serif; background: #111; color: var(--text-main); margin: 0; padding: 0; overflow-x: hidden; }
+
+        /* HEADER */
+        .header-top {
+            display: flex; align-items: center;
+            padding: 15px 30px; background: #000; border-bottom: 2px solid var(--accent);
+            position: sticky; top: 0; z-index: 1000; gap: 30px;
+        }
+        .brand-title { 
+            font-weight: 900; font-size: 1.8rem; letter-spacing: 2px;
+            background: linear-gradient(45deg, #ff3300, #ffd700, #00ff66);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .nav-links { display: flex; gap: 20px; margin-left: auto; }
+        .nav-item { color: #888; text-decoration: none; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; transition: 0.3s; cursor: pointer; display: inline-block; }
+        .nav-item:hover, .nav-item.active { color: var(--gold); }
+
+        /* MAIN LAYOUT */
+        .main-frame { display: flex; width: 100%; min-height: 100vh; background: var(--bg); }
+        .news-feed { flex: 1; padding: 30px; }
+        .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; }
+
+        /* CARDS */
+        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s; }
+        .card:hover { border-color: var(--gold); transform: translateY(-5px); }
+        .card-image { width: 100%; height: 220px; background-size: cover; background-position: center; border-radius: 8px; margin-bottom: 15px; border: 1px solid #333; }
+        .card-title { font-size: 1.3rem; font-weight: 800; color: var(--gold); margin-bottom: 10px; text-transform: uppercase; }
+        .card-excerpt { font-size: 0.9rem; color: #aaa; line-height: 1.4; }
+
+        /* SIDEBAR */
+        .sidebar-right { width: 340px; padding: 30px; border-left: 1px solid var(--border); background: #14161a; flex-shrink: 0; }
+        .neon-container { margin-bottom: 25px; border: 4px solid; border-image-slice: 1; animation: rotateNeon 3s linear infinite; }
+        @keyframes rotateNeon {
+            0% { border-image-source: linear-gradient(0deg, #ff3300, #ffd700, #00ff66, #ff3300); }
+            100% { border-image-source: linear-gradient(360deg, #ff3300, #ffd700, #00ff66, #ff3300); }
+        }
+        .side-btn { display: block; width: 100%; padding: 18px 0; text-align: center; text-decoration: none; font-weight: 900; background: #f3ba2f; color: #000 !important; font-size: 1.2rem; }
+
+        .official-news-box { background: #000; border: 1px solid var(--accent); padding: 15px; border-radius: 8px; font-family: monospace; margin-top: 30px; }
+        .official-news-header { color: var(--accent); font-weight: bold; font-size: 0.9rem; border-bottom: 1px solid #333; padding-bottom: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        
+        #toggle-btn { cursor: pointer; color: #fff; font-size: 1.2rem; font-weight: bold; padding: 0 5px; border: 1px solid #444; line-height: 1; }
+        .news-item { font-size: 0.85rem; margin-bottom: 12px; color: #ddd; cursor: pointer; padding: 8px; border-radius: 4px; transition: 0.2s; border-left: 2px solid transparent; }
+        .news-item:hover { background: #1a1a1a; border-left: 2px solid var(--gold); color: var(--gold); }
+        .news-item b { color: var(--accent); display: block; font-size: 0.7rem; margin-bottom: 3px; }
+
+        /* MODAL / VISOR */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); align-items: flex-start; justify-content: center; padding: 60px 0; overflow-y: auto; }
+        .modal-content { display: flex; width: 90%; max-width: 1200px; gap: 50px; background: #1a1c20; padding: 40px; border: 1px solid var(--accent); border-radius: 12px; }
+        .modal-img-side { flex: 1; text-align: center; }
+        .modal-img-side img { max-width: 100%; border-radius: 10px; border: 1px solid var(--border); }
+        .modal-text-side { flex: 1.2; }
+        #v-title { font-size: 2.5rem; color: var(--gold); font-weight: 900; margin-bottom: 20px; text-transform: uppercase; }
+        #v-body { font-size: 1.2rem; line-height: 1.6; color: #efefef; font-weight: 400; }
+        #v-body h3, #v-body h4 { color: var(--gold); margin-top: 25px; }
+        .close-btn { position: fixed; right: 40px; top: 20px; color: var(--accent); font-size: 50px; cursor: pointer; }
+        #v-link { color: var(--gold); font-size: 1.2rem; margin-top: 20px; display: block; }
+    </style>
+</head>
+<body>
+<header class="header-top">
+    <h1 class="brand-title" style="margin:0; padding:0; display:inline-block;">CRIPTONEURA</h1>
+    
+    <nav class="nav-links">
+        <a href="analisis.html" class="nav-item">ANÁLISIS</a>
+        <a href="opinion.html" class="nav-item">OPINIÓN</a>
+        <a href="index.html" class="nav-item active">TODO</a>
+    </nav>
+</header>
+
+<div class="main-frame">
+    <main class="news-feed">
+        <div class="articles-grid" id="articlesGrid"></div>
+    </main>
+
+    <aside class="sidebar-right">
+        <div class="neon-container">
+            <a href="https://www.binance.com" target="_blank" class="side-btn">BINANCE</a>
+        </div>
+        <div class="neon-container" style="padding:0; line-height:0;">
+            <a href="https://shop.ledger.com/?r=6c6be1aa0797" target="_blank">
+                <img src="./img/Ledgerbtc.png" alt="Ledger" style="width:100%; display:block;">
+            </a>
+        </div>
+        <div class="official-news-box">
+            <div class="official-news-header">
+                NOTICIAS REALES
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span id="timer">00:00:00</span>
+                    <span id="toggle-btn" onclick="toggleNoticias()">x</span>
+                </div>
+            </div>
+            <div id="lista-noticias"></div>
+        </div>
+    </aside>
+</div>
+
+<div id="articleModal" class="modal">
+    <span class="close-btn" onclick="cerrarVisor()">&times;</span>
+    <div class="modal-content">
+        <div class="modal-img-side"><img id="v-img" src="" alt=""></div>
+        <div class="modal-text-side">
+            <div id="v-title"></div>
+            <div id="v-body"></div>
+            <a id="v-link" href="#" target="_blank" style="display:none;">[VER FUENTE ORIGINAL]</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const articles = {
+        btc: {
+            category: "analisis",
+            title: "BTC: Análisis 30/12/2025",
+            image: "img/BTC analisis.png",
+            summary: "Bitcoin cotiza cerca de $87,500 al cierre de 2025, con volatilidad tras el pico de septiembre.",
+            content: `<h4>Al 30 de diciembre de 2025</h4>
+                      <p>Bitcoin se mantiene alrededor de los $87,000-$88,000, tras un año volátil marcado por el entusiasmo inicial por políticas pro-cripto y la posterior corrección por tarifas y macroeconomía.</p>
+                      <p>Analistas destacan que 2025 fue un año de divergencia: avances institucionales (ETFs, reservas estratégicas) vs. estancamiento de precio. Predicciones para 2026 apuntan a un posible rally si se rompen los $94,000, o caída a $65,000 en un escenario bajista.</p>
+                      <p>Recomendación: Mantener exposición a largo plazo (HODL) combinada con DCA para promediar costes en correcciones.</p>
+                      <ul>
+                        <li>Precio actual: ~$87,500</li>
+                        <li>Capitalización: >$1.7 trillones</li>
+                        <li>Factores clave 2026: Regulación, adopción institucional y efectos del halving rezagados.</li>
+                      </ul>`
+        },
+        plata: {
+            category: "analisis",
+            title: "Plata: Físico en Rally Histórico",
+            image: "img/Plata Físico en Rally Histórico.png",
+            summary: "La plata cierra 2025 con ganancias superiores al 150%, impulsada por la demanda industrial.",
+            content: `<h4>El Despertar del Gigante Olvidado: Por qué el "Oro del Pobre" ha humillado a Wall Street</h4>
+                      <p>Mientras la mayoría de los inversores minoristas perseguían sombras en activos tecnológicos sobrevalorados, un grupo selecto de analistas veteranos, con figuras como <strong>Alberto Iturralde</strong> a la cabeza, señalaban silenciosamente hacia el metal más versátil de la tabla periódica. Hoy, con la plata consolidada en los $75/oz, la realidad ha dado la razón a quienes supieron leer el flujo de capital antes que los titulares.</p>
+                      <h4>La Profecía de Iturralde y el Multiplicador de Ganancias</h4>
+                      <p>La clave del éxito en este movimiento no fue solo la paciencia, sino la comprensión del sentimiento de mercado. Cuando la plata languidecía cerca de los $30 a inicios de año, el escepticismo era máximo. Quienes compraron en ese "momento de máxima depresión" no solo han duplicado su capital nominal; han multiplicado su poder adquisitivo en un entorno donde el dinero fiat se desintegra. La plata no ha subido de valor, simplemente ha empezado a reflejar la pérdida de valor del papel moneda frente a un recurso finito.</p>
+                      <h4>El "Efecto Musk" y la Trampa del Papel</h4>
+                      <p>La advertencia de <strong>Elon Musk</strong> no fue un comentario casual. La industria se ha chocado contra un muro físico: no se pueden fabricar paneles solares, chips de IA o componentes de vehículos eléctricos con "plata papel" (futuros y derivados financieros). Existe una desconexión histórica entre el inventario físico real en las bóvedas y las promesas de entrega en los mercados de Londres y Nueva York.</p>
+                      <p>Este déficit estructural es el combustible que podría catapultar el precio por encima de los $100 en 2026. Estamos ante un escenario de "short squeeze" industrial: las empresas tecnológicas necesitan el metal para seguir existiendo, y están dispuestas a pagar cualquier precio por él.</p>
+                      <h4>La Inversión Física como Último Refugio</h4>
+                      <p>En un mundo de terminales digitales y saldos bancarios que pueden ser congelados o devaluados por decreto, la plata física se erige como el hedge definitivo. No tiene riesgo de contrapartida, no puede ser hackeada y, a diferencia del oro, su precio de entrada todavía permite una acumulación masiva para el inversor particular.</p>
+                      <p>¿Es tarde para entrar? Si el análisis de déficit global se mantiene, los $75 actuales podrían ser vistos en el futuro como un regalo. La plata ha dejado de ser una materia prima para convertirse en una cuestión de soberanía financiera.</p>
+                      <h4>⚠️ El Factor de Riesgo: No dejes que el FOMO dicte tu futuro</h4>
+                      <p>A pesar de la narrativa alcista, entrar al mercado tras una revalorización tan vertical conlleva riesgos extremos que un inversor novato debe conocer:</p>
+                      <p><strong>Riesgo de Corrección Técnica:</strong> Ningún activo sube en línea recta; tras duplicar su valor desde los $30, la plata podría sufrir una toma de beneficios masiva que hunda el precio temporalmente, atrapando a quienes compraron en la cima.</p>
+                      <p><strong>Volatilidad del Sector:</strong> La plata es conocida como "el metal del diablo" por su capacidad de oscilar violentamente; una caída del 20% o 30% puede ocurrir en días, lo que podría pulverizar los ahorros de quien entre sin una estrategia de gestión de riesgo.</p>
+                      <p><strong>Capital en Riesgo:</strong> Nunca se debe invertir dinero destinado a necesidades básicas o ahorros de emergencia. La inversión en metales debe considerarse una parte pequeña y diversificada de un patrimonio, no una apuesta al "todo o nada".</p>
+                      <p><strong>Responsabilidad Individual:</strong> Este análisis es educativo y refleja una tendencia de mercado; no es una garantía de éxito. La decisión final de compra debe ser tomada tras una reflexión personal profunda, entendiendo que el mercado no tiene piedad con la falta de preparación.</p>`
+        },
+        fed: {
+            category: "analisis",
+            title: "FED: Auditoría y Transparencia",
+            image: "img/los 4 jinetes del dinero.png",
+            summary: "La tiranía de los mercados sintéticos y la corrupción del sistema.",
+            content: `<h3>Tiranía Financiera: Cómo los grandes fondos destruyen el precio de lo que no poseen</h3>
+                      <h3>Los Arquitectos de la Caída: Hedge Funds y Market Makers.</h3>
+                      <p>No es el "mercado" el que decide; son fondos como Citadel, BlackRock o Susquehanna. Estas entidades utilizan su capacidad de Market Maker para crear liquidez infinita de la nada. Si deciden que el Bitcoin o la Plata deben bajar, inyectan miles de millones en posiciones cortas sintéticas. Venden activos que no tienen para forzar una cascada de liquidaciones, barriendo el dinero de los minoristas para comprar ellos en el suelo.</p>
+                      <h3>El Capital como Arma de Destrucción Masiva.</h3>
+                      <p>Con un cofre de 1.000 millones, estos fondos no invierten, dictan. Usan el apalancamiento para mover el precio contra toda lógica fundamental. Saben dónde están tus órdenes de venta (stop-loss) y empujan el precio hasta activarlas. Es una transferencia de riqueza legalizada: ellos imprimen "papel" (promesas de venta) y tú entregas tus activos reales por miedo.</p>
+                      <h3>Cómplices Necesarios: La Corrupción de Ambos Partidos.</h3>
+                      <p>¿Por qué no hay investigaciones serias? Porque el sistema está blindado por donaciones. Estos fondos son los principales financistas de las campañas tanto de Demócratas como de Republicanos. Es un seguro de impunidad. Si pagas la fiesta de ambos bandos, te aseguras de que nadie en el Congreso proponga leyes reales contra el Naked Short Selling o la manipulación de derivados.</p>
+                      <h3>El Engaño de la Supervisión (SEC y CFTC).</h3>
+                      <p>Los organismos reguladores actúan como una "puerta giratoria". Los mismos que hoy deberían vigilar la manipulación en Wall Street, son exempleados de esos fondos o esperan un puesto millonario en ellos al terminar su servicio público. El resultado es una investigación de fachada mientras la manipulación en el mercado de futuros sigue desangrando al inversor real.</p>
+                      <h3>La Salida del Sistema: Propiedad vs. Especulación.</h3>
+                      <p>La única forma de ganarles es quitarles la munición. Mientras tus activos estén en un bróker o un exchange centralizado, ellos los usan para jugar en tu contra. La soberanía financiera solo existe fuera de su alcance: en metales físicos y en billeteras frías (Cold Wallets). Solo así el precio dejará de ser una cifra manipulada por un algoritmo y volverá a representar el valor real de la escasez.</p>
+                      <h3>BlackRock, Vanguard, State Street y Citadel Securities: Los 4 jinetes de tus ahorros.</h3>`
+        },
+        brics: {
+            category: "analisis",
+            title: "Xi y el yuan digital en Oro",
+            image: "img/oro mejor esta.jpg",
+            summary: "Yuan Digital respaldado en oro.",
+            content: `<h3>Xi Jinping y el Oro</h3>
+                      <p>La estrategia de Xi Jinping representa una maniobra maestra de ajedrez financiero: la acumulación masiva de reservas físicas de oro (más de 2.262 toneladas oficiales en 2025 y posiblemente miles más no declaradas) busca desmantelar progresivamente la hegemonía del dólar y posicionar al yuan como alternativa global.</p>
+                      <p>Pekín está desarrollando un sistema dual del yuan digital (e-CNY) conocido como la Teoría del Yuan Bifurcado, una hipótesis basada en las estrategias económicas observadas de China, como su acumulación de oro, el lanzamiento del yuan digital (e-CNY) con más de 260 millones de usuarios en pruebas avanzadas, y su enfoque en el comercio internacional para contrarrestar sanciones y la dominancia del dólar.</p>
+                      <p>China enfrenta un dilema económico clásico: necesita una moneda fuerte para importar recursos esenciales (energía, materias primas y tecnología) a precios bajos, pero una moneda débil para mantener sus exportaciones competitivas, impulsando el crecimiento y el empleo interno.</p>
+                      <p>La teoría propone que el e-CNY se bifurca en dos variantes:</p>
+                      <p>Este dualismo resuelve el dilema: moneda fuerte para importar recursos esenciales y moneda débil para exportar competitivamente. El resultado es un blindaje económico: reducción de riesgos por sanciones, superávit sostenido y progresiva desdolarización del comercio global.</p>
+                      <p>El mensaje es claro: “EL ORO ES SOBERANÍA”.</p>`
+        },
+        ia: {
+            category: "analisis",
+            title: "IA: Carrera por la Supremacía 2025-2026",
+            image: "img/ia-futuro.jpg",
+            summary: "China vs. Musk: La guerra fría de los superordenadores y el fin de la IA como simple chat.",
+            content: `<h4>La Muralla Digital: El dinero ingente de Pekín</h4>
+                      <p>Mientras Occidente debate sobre ética, el Partido Comunista Chino ha inyectado una cantidad **ingente de capital estatal** en el "Proyecto Dragón de Silicio". China no busca crear un asistente para el móvil; busca soberanía total. Con subsidios que superan los 100.000 millones de dólares, están levantando granjas de GPUs nacionales para alimentar una IA que controle desde la vigilancia predictiva hasta la gestión de redes eléctricas nacionales.</p>
+                      <h4>Elon Musk y el monstruo 'Colossus'</h4>
+                      <p>Elon Musk ha respondido con **Grok 5**, entrenado en el superordenador más potente del mundo: Colossus. Musk pretende que la IA sea el cerebro de la flota de Tesla y de los robots Optimus. Su ventaja competitiva es el flujo de datos masivo de X, buscando una IA que no solo hable, sino que **comprenda la física y la ingeniería**.</p>
+                      <h4>Google: La IA que cura y descubre</h4>
+                      <p>Google ha pivotado hacia la "IA Científica". Su división DeepMind está utilizando modelos multimodales para mapear la biología molecular. Lo que antes llevaba 20 años de investigación, la IA lo resuelve en semanas. Estamos ante una revolución en la **creación de nuevos fármacos y materiales superconductores**.</p>
+                      <h4>Predicciones 2026: Los 4 Pilares del Dominio</h4>
+                      <ul>
+                          <li><strong>Soberanía Energética:</strong> La IA se usará para estabilizar redes eléctricas y optimizar la fusión nuclear.</li>
+                          <li><strong>Agentes Ejecutores:</strong> Veremos IAs que compran, venden y negocian activos sin supervisión humana.</li>
+                          <li><strong>Guerra Fría de Chips:</strong> El control de los semiconductores será más importante que las reservas de petróleo.</li>
+                          <li><strong>Fusión Biotecnológica:</strong> La IA diseñará proteínas específicas para erradicar enfermedades hereditarias.</li>
+                      </ul>
+                      <p><strong>Nota de Inteligencia:</strong> La IA ya no es una opción tecnológica, es el nuevo tablero de la geopolítica mundial. Quien gane la carrera del 2026 dictará las reglas del próximo siglo.</p>`
+        },
+        cbdc: {
+            category: "opinion",
+            title: "CBDCs: El Fin de la Libertad Individual ",
+            image: "img/CDBCs 2.jpg",
+            summary: "No es dinero, es una herramienta de control social y vigilancia total.",
+            content: `
+                <h4>El dinero en efectivo es libertad porque es anónimo. Las CBDCs son el control absoluto porque cada céntimo lleva tu nombre, tu ubicación y tu comportamiento grabados en tiempo real.</h4>
+                
+                <h4>Vigilancia en cada sorbo y en cada paso</h4>
+                <p>Imagina que el sistema registra si el café que te has tomado a las 9:15 era con leche de soja o de vaca. No es una exageración: en un mundo de dinero programable, el supermercado informa de tu cesta de la compra a través de tu tarjeta o dispositivo, y el Banco Central analiza tus hábitos de salud. Si compras demasiada carne roja o azúcar, tu "puntuación de crédito social" podría bajar, o podrías recibir un recargo automático en tu seguro médico (China como ejemplo del buen ciudadano).</p>
+
+                <h4>El fin de la vida privada</h4>
+                <p>¿Vas a una consulta médica que prefieres mantener en privado? ¿Asistes a una reunión política o compras un libro crítico con el sistema? Al pagar con el único dinero permitido (el digital estatal), estás entregando tu ubicación y tus intereses. Ya no existe el "dónde estás", porque tu rastro financiero es un GPS que nunca se apaga. Lo que hoy consideras un espacio íntimo, mañana será un dato en el servidor de un funcionario.</p>
+
+                <h4>Dinero con fecha de caducidad</h4>
+                <p>A diferencia de tus ahorros actuales, las CBDCs pueden ser programadas para caducar. El Estado podrá decidir que tus fondos deben gastarse antes de final de mes para "estimular la economía", impidiéndote ahorrar para tu propio futuro. Es la expropiación silenciosa de la voluntad individual.</p>
+
+                <p>La gran pregunta es, ¿estamos evolucionando a una mayor democracia, o al absolutismo de la Edad Media, pero con señores en traje y corbata que no te amenazan con la espada, sino con la eliminación de tu dinero por el bien común (o comunista)?</p>
+
+                <h4>La desobediencia como única salida</h4>
+                <p>La implementación de las CBDCs es el paso final hacia una sociedad donde el disidente no es encarcelado, sino simplemente "apagado" financieramente. La única defensa es volver a lo tangible: el oro, la plata y la verdadera descentralización fuera del alcance de los algoritmos estatales. Si permitimos que controlen nuestro intercambio de valor, habrás entregado la última frontera de nuestra libertad.</p>
+            `
+        },
+        feudal: {
+            category: "opinion",
+            title: "El Fin de la Libertad y el Retorno al Feudalismo Digital",
+            image: "img/feudal.png",
+            summary: "No es dinero, es vigilancia. Descubre quiénes son los rostros que deciden tu futuro sin tu voto.",
+            content: `
+                <p>El dinero en efectivo es libertad porque es anónimo. El control absoluto digital significa que cada céntimo que gastas deja tu rastro grabado en tiempo real para el poder central.</p>
+                
+                <p>Estamos entrando en una era que recuerda al medievo, pero con tecnología punta. El ciudadano ya no es un soberano con derechos, sino un siervo digital cuyos movimientos financieros dependen de la voluntad de una élite tecnocrática que nadie ha elegido.</p>
+
+                <h3>Vigilancia en cada paso: El fin de tu privacidad</h3>
+                <p>Imagina que el sistema registra cada una de tus compras. En este nuevo mundo de dinero controlado, el Banco Central analiza tus hábitos. Si compras productos que el sistema clasifica como "no saludables" o "no alineados", tu puntuación de crédito social podría bajar o podrías recibir recargos automáticos en tus impuestos.</p>
+                
+                <h3>Los Rostros del Control: Puestos a Dedo</h3>
+                <p>La cara visible de este sistema es <strong>Christine Lagarde</strong>, Presidenta del Banco Central Europeo (BCE). Su trayectoria es el ejemplo perfecto de la "puerta giratoria" de las élites: del FMI al BCE, saltando de una institución global a otra sin pasar jamás por unas elecciones libres del pueblo europeo. Son tecnócratas designados a dedo intercambiándose las sillas para perpetuar una agenda única que tú no has votado.</p>
+                
+                <h3>La Desconexión Democrática</h3>
+                <p>¿Quién eligió a los directivos del BCE para tener el poder de "apagar" tu dinero cuando ellos quieran? Nadie. Se posicionan como la autoridad financiera central con poder para monitorizar y censurar el acceso al valor de cualquier ciudadano, operando totalmente fuera del alcance del voto popular y de la soberanía de las naciones.</p>
+                
+                <h3>Dinero con fecha de caducidad: La trampa final</h3>
+                <p>Este sistema permite que el dinero sea programado para caducar, obligándote a gastar tus ahorros cuando el Estado decida "estimular la economía". Es el paso final hacia una sociedad donde el disidente no es encarcelado, sino simplemente anulado financieramente: te conviertes en un simple invitado en tu propia cuenta bancaria.</p>
+                
+                <h3>La Desobediencia como Única Salida</h3>
+                <p>Lo que ellos llaman "progreso" es, en realidad, vigilancia masiva bajo la promesa de un "bien común" o un modelo de control comunista digital. La única defensa es la soberanía financiera: volver a lo tangible (oro y plata) y a la verdadera descentralización fuera del alcance de los algoritmos estatales. Si no controlas tu propio efectivo y tus claves, habrás entregado tu libertad para siempre.</p>
+            `
+        },
+        grok: {
+            category: "analisis",
+            title: "LA ÚLTIMA CON GROK 2026",
+            image: "img/lagrok.jpg",
+            summary: "xAI lanza Grok Business/Enterprise, expande Colossus y prepara Grok 5 para Q1 2026 con posible AGI.",
+            content: `<h4>La Ofensiva Empresarial de xAI</h4>
+                      <p>El 31 de diciembre de 2025, xAI lanzó oficialmente <strong>Grok Business</strong> y <strong>Grok Enterprise</strong>: suscripciones para empresas con acceso prioritario a los modelos más avanzados, integración segura con Google Drive (respetando permisos), y garantía absoluta de que los datos corporativos nunca se usan para entrenar modelos.</p>
+                      <p>Precios: Business ~$30/usuario/mes; Enterprise personalizado con SSO, auditoría avanzada y "Enterprise Vault" (claves de encriptación gestionadas por el cliente).</p>
+                      <h4>Expansión Brutal de Infraestructura</h4>
+                      <p>Elon Musk anunció la compra del tercer edificio "MACROHARDRR" (guiño a Microsoft), llevando la potencia de entrenamiento de xAI a casi 2GW. Esto alimenta Colossus 2, con objetivo de alcanzar 1 millón de GPUs en 2026 para entrenar <strong>Grok 5</strong> (6 billones de parámetros).</p>
+                      <h4>Grok 5 y el Salto al AGI</h4>
+                      <p>Programado para Q1 2026, Grok 5 será el modelo más grande anunciado públicamente. Musk asigna un 10% de probabilidad de lograr el primer AGI real del mundo con esta versión. Incluye comprensión nativa de vídeo, agentes autónomos y razonamiento multimodal de frontera.</p>
+                      <h4>Adopción Masiva y Gobierno</h4>
+                      <p>Grok lidera en tiempo de uso global y benchmarks (OpenRouter, coding, creatividad). Además, integración confirmada con plataformas gubernamentales USA (incluyendo Defense) a partir de 2026.</p>
+                      <p><strong>Conclusión:</strong> 2026 será el año en que Grok pase de chatbot a infraestructura crítica global. La carrera por la supremacía IA se acelera, y xAI va a toda máquina.</p>`
+        }
+    };
+
+    function toggleNoticias() {
+        const lista = document.getElementById('lista-noticias');
+        const btn = document.getElementById('toggle-btn');
+        lista.style.display = (lista.style.display === "none") ? "block" : "none";
+        btn.innerText = (lista.style.display === "none") ? "ABRIR" : "x";
+    }
+
+    function renderArticles(filter = 'all') {
+        const grid = document.getElementById('articlesGrid');
+        grid.innerHTML = '';
+        Object.keys(articles).forEach(key => {
+            const art = articles[key];
+            if (filter === 'all' || art.category === filter) {
+                grid.innerHTML += `
+                    <div class="card" onclick="verArticulo('${key}')">
+                        <div class="card-image" style="background-image: url('${art.image}')"></div>
+                        <div class="card-title">${art.title}</div>
+                        <div class="card-excerpt">${art.summary}</div>
+                    </div>`;
+            }
+        });
+    }
+
+    function verArticulo(key) {
+        const art = articles[key];
+        document.getElementById('v-img').src = art.image;
+        document.getElementById('v-title').innerText = art.title;
+        document.getElementById('v-body').innerHTML = art.content;
+        document.getElementById('v-link').style.display = 'none';
+        document.getElementById('articleModal').style.display = 'flex';
+    }
+
+    async function cargarNoticias() {
+        const lista = document.getElementById('lista-noticias');
+        try {
+            const res = await fetch('https://min-api.cryptocompare.com/data/v2/news/?lang=EN');
+            const data = await res.json();
+            let filtradas = data.Data
+                // Excluir CoinTelegraph explícitamente
+                .filter(n => !n.source.toLowerCase().includes('cointelegraph'))
+                // Filtro por palabras clave relevantes (en inglés, fuentes grandes como Reuters, Bloomberg, CNBC, etc.)
+                .filter(n => {
+                    const txt = (n.title + n.body).toLowerCase();
+                    const keywords = ['fed', 'sec', 'elon', 'musk', 'trump', 'china', 'lagarde', 'xi', 'bitcoin', 'gold', 'silver', 'reserve', 'central bank', 'crypto', 'economy'];
+                    return keywords.some(k => txt.includes(k));
+                })
+                .slice(0, 8);
+
+            window.noticiasData = filtradas;
+            lista.innerHTML = '';
+            filtradas.forEach((n, i) => {
+                lista.innerHTML += `<div class="news-item" onclick="abrirNoticia(${i})"><b>${n.source.toUpperCase()}</b>${n.title}</div>`;
+            });
+        } catch (e) {
+            lista.innerHTML = '<div class="news-item">Error sincronizando...</div>';
+        }
+    }
+
+    function abrirNoticia(i) {
+        const n = window.noticiasData[i];
+        document.getElementById('v-img').src = n.imageurl || '';
+        document.getElementById('v-title').innerText = n.title;
+        document.getElementById('v-body').innerHTML = `<p>${n.body}</p>`;
+        document.getElementById('v-link').href = n.url;
+        document.getElementById('v-link').style.display = 'block';
+        document.getElementById('articleModal').style.display = 'flex';
+    }
+
+    function cerrarVisor() { document.getElementById('articleModal').style.display = 'none'; }
+
+    function updateTimer() {
+        const now = new Date();
+        const mad = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Madrid"}));
+        const midnight = new Date(mad);
+        midnight.setHours(24,0,0,0);
+        const diff = midnight - mad;
+        const h = Math.floor(diff / 3600000).toString().padStart(2,'0');
+        const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2,'0');
+        const s = Math.floor((diff % 60000) / 1000).toString().padStart(2,'0');
+        document.getElementById('timer').innerText = `${h}:${m}:${s}`;
+    }
+
+    window.onclick = e => { if (e.target.className.includes('modal')) cerrarVisor(); };
+    window.onload = () => { renderArticles('all'); cargarNoticias(); setInterval(updateTimer, 1000); };
+</script>
+</body>
+</html>
