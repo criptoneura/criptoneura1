@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>TERMINAL ESTRATÉGICA | CRIPTONEURA</title>
+    <style>
+        :root { 
+            --accent: #ff3300; 
+            --bg: #0a0a0a; 
+            --card-bg: #111; 
+            --text: #ffffff; 
+            --terminal-green: #00ff41; 
+            --danger: #ff0000; 
+            --warning: #ffcc00;
+        }
+
+        /* Estilos generales aumentados */
+        body { 
+            font-family: 'Courier New', monospace; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            padding: 0; 
+            font-size: 18px; 
+            overflow-x: hidden;
+        }
+        
+        /* Ticker Superior Animado */
+        .ticker-wrap { 
+            background: #000; 
+            border-bottom: 3px solid var(--accent); 
+            padding: 15px; 
+            overflow: hidden; 
+            white-space: nowrap; 
+        }
+        .ticker { 
+            display: inline-block; 
+            animation: scroll 30s linear infinite; 
+        }
+        .ticker-item { 
+            display: inline-block; 
+            margin-right: 60px; 
+            font-size: 1.3rem; 
+            font-weight: bold; 
+        }
+        @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        /* Navegación */
+        .top-nav { 
+            background: rgba(0,0,0,0.9); 
+            padding: 25px 40px; 
+            border-bottom: 1px solid #333; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .brand-logo { 
+            font-size: 3rem; 
+            font-weight: 900; 
+            background: linear-gradient(90deg, #ff3300, #00ff41); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            letter-spacing: 4px;
+        }
+
+        /* --- COMENTARIO: AQUÍ ME EQUIVOQUÉ (Faltaba definir la clase CSS para el botón) --- */
+        .boton-inicio-rojo {
+            background-color: #ff3300 !important; /* Relleno rojo */
+            color: #ffffff !important;           /* Letras blancas */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 25px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+            border: 2px solid #ff3300;
+            font-family: 'Inter', sans-serif;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+
+        .boton-inicio-rojo:hover {
+            background-color: #cc2900 !important;
+            border-color: #ffd700 !important;
+            box-shadow: 0 0 10px rgba(255, 51, 0, 0.5);
+        }
+        /* --- FIN DEL CAMBIO --- */
+        
+        /* Layout */
+        .container { 
+            max-width: 1800px; 
+            margin: 30px auto; 
+            padding: 0 30px; 
+            display: grid; 
+            grid-template-columns: 2.8fr 1fr; 
+            gap: 40px; 
+        }
+        
+        /* Módulos de información */
+        .module { 
+            background: var(--card-bg); 
+            border: 2px solid #222; 
+            padding: 30px; 
+            border-radius: 8px; 
+            margin-bottom: 30px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .module-title { 
+            color: var(--accent); 
+            font-size: 1rem; 
+            font-weight: bold; 
+            letter-spacing: 3px; 
+            margin-bottom: 25px; 
+            display: block; 
+            border-bottom: 1px solid #333; 
+            padding-bottom: 10px; 
+            text-transform: uppercase;
+        }
+
+        /* Consola Terminal */
+        .terminal-box { 
+            background: #000; 
+            color: var(--terminal-green); 
+            padding: 25px; 
+            height: 220px; 
+            overflow-y: auto; 
+            font-size: 1.2rem; 
+            border: 2px solid #333; 
+            line-height: 1.6; 
+            margin-bottom: 30px; 
+            box-shadow: inset 0 0 30px #001a00;
+        }
+        .terminal-line { cursor: pointer; padding: 6px 10px; border-bottom: 1px solid #111; transition: 0.2s; }
+        .terminal-line:hover { background: #081a08; color: #fff; }
+
+        /* Grilla de Criptos */
+        .market-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 20px; 
+        }
+        .market-item { 
+            background: #000; 
+            border: 1px solid #333; 
+            padding: 20px; 
+            border-radius: 6px; 
+            transition: 0.3s; 
+        }
+        .market-item:hover { border-color: var(--terminal-green); transform: scale(1.02); }
+        
+        .coin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .coin-symbol { font-size: 1.6rem; font-weight: 900; color: #fff; }
+        .coin-pct { font-weight: bold; font-size: 1.1rem; }
+        
+        .coin-price { font-size: 1.8rem; font-weight: 900; color: var(--terminal-green); display: block; margin: 8px 0; }
+        .coin-stats { font-size: 0.9rem; color: #777; line-height: 1.7; }
+        .coin-stats b { color: #bbb; font-weight: normal; }
+
+        /* Riesgo y Semáforo */
+        .status-dots { display: flex; gap: 15px; margin-bottom: 25px; }
+        .dot { width: 25px; height: 25px; border-radius: 50%; background: #222; border: 2px solid #000; }
+        .active-red { background: var(--danger) !important; box-shadow: 0 0 20px var(--danger); }
+        .active-yellow { background: var(--warning) !important; box-shadow: 0 0 20px var(--warning); }
+        .active-green { background: var(--terminal-green) !important; box-shadow: 0 0 20px var(--terminal-green); }
+
+        .risk-bar-container { background: #222; height: 30px; border-radius: 15px; margin: 20px 0; overflow: hidden; border: 2px solid #333; }
+        .risk-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #00ff41, #ffcc00, #ff3300); transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1); }
+
+        /* Informe Editorial */
+        h2#manual-titulo { font-size: 2.8rem; margin: 0 0 15px 0; color: #fff; }
+        p#manual-texto { font-size: 1.4rem; line-height: 1.8; color: #ccc; }
+
+        /* Popups */
+        .popup-intel { 
+            display: none; 
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            background: #000; 
+            border: 3px solid var(--accent); 
+            padding: 40px; 
+            z-index: 10000; 
+            width: 550px; 
+            text-align: center; 
+            box-shadow: 0 0 150px rgba(255,51,0,0.4); 
+        }
+
+        .btn-close { 
+            background: var(--accent); 
+            border: none; 
+            padding: 15px; 
+            width: 100%; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 25px; 
+            font-size: 1.1rem; 
+            text-transform: uppercase;
+        }
+
+        /* Estilos Relojes Lateral */
+        .clock-row { font-size: 1.3rem; margin-bottom: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding-bottom: 5px; }
+        .clock-label { color: #888; }
+        .clock-time { color: var(--terminal-green); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div id="alert-popup" class="popup-intel">
+    <h3 id="popup-title" style="color:var(--accent); font-size: 2rem; margin-top:0;">SEÑAL DE INTELIGENCIA</h3>
+    <p id="popup-text" style="color:#eee; font-size: 1.3rem; line-height: 1.6;"></p>
+    <button class="btn-close" onclick="this.parentElement.style.display='none'">CERRAR CONSOLA</button>
+</div>
+
+<div class="ticker-wrap">
+    <div class="ticker" id="ticker-api">ESTABLECIENDO ENLACE CON NODOS DE TRADING...</div>
+</div>
+
+<nav class="top-nav">
+    <span class="brand-logo">CRIPTONEURA</span>
+    <a href="index.html" class="boton-inicio-rojo">← INICIO</a>
+</nav>
+
+<div class="container">
+    <main>
+        <div class="terminal-box" id="terminal"></div>
+
+        <section class="module">
+            <span class="module-title">[ MONITOR DE MERCADO GLOBAL - 20 ACTIVOS ]</span>
+            <div id="top-list" class="market-grid"></div>
+        </section>
+
+        <section class="module">
+            <div class="status-dots">
+                <div id="dot-red" class="dot"></div>
+                <div id="dot-yellow" class="dot"></div>
+                <div id="dot-green" class="dot"></div>
+            </div>
+            <span class="module-title">[ ANÁLISIS ESTRATÉGICO ]</span>
+            <h2 id="manual-titulo">CARGANDO INFORME...</h2>
+            <p id="manual-texto">Esperando sincronización de datos manuales desde noticias.js</p>
+        </section>
+    </main>
+
+    <aside>
+        <div class="module">
+            <span class="module-title">[RIESGO DEL SISTEMA]</span>
+            <div class="risk-bar-container"><div id="risk-fill" class="risk-bar-fill"></div></div>
+            <p id="risk-label" style="text-align:center; font-weight:bold; font-size: 1.2rem;"></p>
+        </div>
+
+        <div class="module">
+            <span class="module-title">[ MIEDO Y CODICIA ]</span>
+            <div style="text-align: center; padding: 10px;">
+                <div id="fear-value" style="font-size: 3rem; font-weight: 900;">--</div>
+                <div id="fear-label" style="font-size: 1rem; letter-spacing: 2px;">CARGANDO...</div>
+                <div style="width: 100%; height: 6px; background: #222; margin-top: 10px; border: 1px solid #333;">
+                    <div id="fear-bar" style="width: 0%; height: 100%; transition: 1s;"></div>
+                </div>
+                <div style="font-size: 0.7rem; color: #666; margin-top: 10px;">AYER: <span id="fear-yesterday">--</span></div>
+            </div>
+        </div>
+
+        <div class="module">
+            <span class="module-title">[ SESIONES ACTIVAS ]</span>
+            <div class="clock-row"><span class="clock-label">NUEVA YORK</span><span id="ny" class="clock-time">--</span></div>
+            <div class="clock-row"><span class="clock-label">LONDRES</span><span id="ldn" class="clock-time">--</span></div>
+            <div class="clock-row"><span class="clock-label">HONG KONG</span><span id="hk" class="clock-time">--</span></div>
+        </div>
+
+        <div class="module">
+            <span class="module-title">[INDICADORES MACRO]</span>
+            <div class="clock-row"><span class="clock-label">DXY DÓLAR</span><span id="val-dxy" style="color:var(--terminal-green); font-weight: bold;">--</span></div>
+            <div class="clock-row"><span class="clock-label">ORO/PLATA</span><span id="val-oro" style="color:var(--terminal-green); font-weight: bold;">--</span></div>
+            <div class="clock-row"><span class="clock-label">DOMINANCIA</span><span id="val-dom" style="color:var(--terminal-green); font-weight: bold;">--</span></div>
+            <div class="clock-row"><span class="clock-label">HASHRATE</span><span id="val-hash" style="color:var(--terminal-green); font-weight: bold;">--</span></div>
+        </div>
+    </aside>
+</div>
+
+<script src="noticias.js"></script>
+<script>
+    const term = document.getElementById('terminal');
+    let inicializado = false;
+
+    function logTerminal(msg, detalle) {
+        const line = document.createElement('div');
+        line.className = "terminal-line";
+        line.innerText = msg;
+        line.onclick = () => {
+            document.getElementById('popup-text').innerText = detalle;
+            document.getElementById('alert-popup').style.display = 'block';
+        };
+        term.appendChild(line);
+        term.scrollTop = term.scrollHeight;
+    }
+
+    function nFormat(num) {
+        if(num >= 1e12) return (num/1e12).toFixed(2) + "T";
+        if(num >= 1e9) return (num/1e9).toFixed(2) + "B";
+        if(num >= 1e6) return (num/1e6).toFixed(2) + "M";
+        return num.toLocaleString();
+    }
+
+    function updateSentiment(valor, ayer) {
+        const v = parseInt(valor);
+        const valEl = document.getElementById('fear-value');
+        const labEl = document.getElementById('fear-label');
+        const barEl = document.getElementById('fear-bar');
+        const yestEl = document.getElementById('fear-yesterday');
+
+        if(!valEl) return; 
+
+        valEl.innerText = v;
+        if(yestEl) yestEl.innerText = ayer;
+        if(barEl) barEl.style.width = v + "%";
+
+        let color = 'var(--warning)';
+        let texto = 'MIEDO';
+
+        if(v <= 25) { color = 'var(--danger)'; texto = 'MIEDO EXTREMO'; }
+        else if(v > 45 && v <= 55) { color = '#fff'; texto = 'NEUTRAL'; }
+        else if(v > 55) { color = 'var(--terminal-green)'; texto = 'CODICIA'; }
+
+        valEl.style.color = color;
+        if(labEl) { labEl.innerText = texto; labEl.style.color = color; }
+        if(barEl) barEl.style.background = color;
+    }
+
+    async function boot() {
+        logTerminal("> INICIALIZANDO NÚCLEO DE INTELIGENCIA...", "Sistemas Pro-Visual v2.0 activos.");
+        await new Promise(r => setTimeout(r, 800));
+
+        if(window.datosCriptoneura) {
+            const d = window.datosCriptoneura;
+            
+            document.getElementById('manual-titulo').innerText = d.tituloInforme;
+            document.getElementById('manual-texto').innerText = d.textoInforme;
+            document.getElementById('val-oro').innerText = d.ratioOroPlata;
+            document.getElementById('val-dxy').innerText = d.dxyDolar;
+            document.getElementById('val-dom').innerText = d.dominanciaBTC;
+            document.getElementById('val-hash').innerText = d.hashrate;
+
+            logTerminal("> SEÑAL DETECTADA: " + d.alertaBallena.substring(0,45) + "...", d.alertaBallena);
+            await new Promise(r => setTimeout(r, 500));
+            logTerminal("> MOVIMIENTO MACRO: " + d.alertaOro, "Análisis actualizado.");
+
+            const r = parseInt(d.nivelRiesgo);
+            document.getElementById('risk-fill').style.width = r + "%";
+            document.getElementById('risk-label').innerText = "RATING DE RIESGO: " + r + "/100";
+            document.getElementById('risk-label').style.color = r > 70 ? 'var(--danger)' : 'var(--terminal-green)';
+
+            if(r > 70) document.getElementById('dot-red').classList.add('active-red');
+            else if(r > 40) document.getElementById('dot-yellow').classList.add('active-yellow');
+            else document.getElementById('dot-green').classList.add('active-green');
+
+            if(d.nivelMiedo) {
+                updateSentiment(d.nivelMiedo, d.miedoAyer);
+            }
+        }
+    }
+
+    async function updateMarket() {
+        try {
+            const url = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,USDT,XRP,BNB,SOL,USDC,TRX,DOGE,ADA,BCH,WBTC,XLM,WBETH,LINK,ZEC,SUI,LTC,USDE,AVAX&tsyms=USD";
+            const response = await fetch(url);
+            const json = await response.json();
+            const raw = json.RAW;
+            const list = document.getElementById('top-list');
+            list.innerHTML = "";
+
+            for (const coin in raw) {
+                const c = raw[coin].USD;
+                const pct = c.CHANGEPCT24HOUR.toFixed(2);
+                const colorPct = pct >= 0 ? 'var(--terminal-green)' : 'var(--danger)';
+
+                list.innerHTML += `
+                    <div class="market-item">
+                        <div class="coin-head">
+                            <span class="coin-symbol">${coin}</span>
+                            <span class="coin-pct" style="color:${colorPct}">${pct >= 0 ? '▲' : '▼'} ${pct}%</span>
+                        </div>
+                        <span class="coin-price">$${c.PRICE.toLocaleString()}</span>
+                        <div class="coin-stats">
+                            <b>VOL 24H:</b> $${nFormat(c.VOLUME24HOURTO)}<br>
+                            <b>MKT CAP:</b> $${nFormat(c.MKTCAP)}
+                        </div>
+                    </div>`;
+
+                if(coin === 'BTC') {
+                    document.getElementById('ticker-api').innerHTML = `
+                        <div class="ticker-item">BITCOIN: <span style="color:var(--terminal-green)">$${c.PRICE.toLocaleString()}</span></div>
+                        <div class="ticker-item">VOLUMEN: <span>$${nFormat(c.VOLUME24HOURTO)}</span></div>
+                        <div class="ticker-item">CAMBIO 24H: <span style="color:${colorPct}">${pct}%</span></div>
+                    `;
+                }
+            }
+            if(!inicializado) {
+                logTerminal("> ENLACE DE MERCADO SINCRONIZADO.", "Flujo de 20 activos OK.");
+                inicializado = true;
+            }
+        } catch(e) { console.error("Error mercado"); }
+    }
+
+    function updateClocks() {
+        const opt = { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false };
+        document.getElementById('ny').innerText = new Date().toLocaleTimeString('es-ES', {timeZone:'America/New_York', ...opt});
+        document.getElementById('ldn').innerText = new Date().toLocaleTimeString('es-ES', {timeZone:'Europe/London', ...opt});
+        document.getElementById('hk').innerText = new Date().toLocaleTimeString('es-ES', {timeZone:'Asia/Hong_Kong', ...opt});
+    }
+
+    boot();
+    updateClocks();
+    updateMarket();
+    setInterval(updateClocks, 1000);
+    setInterval(updateMarket, 30000);
+</script>
+</body>
+</html>
