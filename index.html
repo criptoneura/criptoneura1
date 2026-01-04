@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+<header class="header-top">
+    <h1><a href="index.html" class="brand-title">CRIPTONEURA</a></h1>
+    
+    <nav class="nav-links">
+    <a href="#" class="nav-item terminal-btn active" onclick="renderArticles('all')">TODO</a>
+    <a href="#" class="nav-item terminal-btn" onclick="renderArticles('opinion')">OPINIÓN</a>
+    <a href="#" class="nav-item terminal-btn" onclick="renderArticles('analisis')">ANÁLISIS</a>
+    <a href="terminal.html" class="nav-item terminal-btn">IR A TERMINAL</a>
+</nav>
+
+</header>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -77,19 +87,77 @@
         #v-body h3, #v-body h4 { color: var(--gold); margin-top: 25px; }
         .close-btn { position: fixed; right: 40px; top: 20px; color: var(--accent); font-size: 50px; cursor: pointer; }
         #v-link { color: var(--gold); font-size: 1.2rem; margin-top: 20px; display: block; }
+        
+         /*Boton terminal*/
+         /* Estilo unificado para todos los botones del menú */
+         .terminal-btn { 
+          color: #ffffff !important;           /* Letras blancas */
+          background-color: var(--accent);     /* Relleno rojo (usando tu variable --accent) */
+          border: 1px solid var(--accent);     /* Borde rojo */
+          padding: 8px 15px;                   /* Espaciado interno */
+          border-radius: 4px;                  /* Bordes redondeados */
+          text-decoration: none;               /* Quitar subrayado */
+          font-weight: 700;                    /* Letra negrita */
+          font-size: 0.8rem;                   /* Tamaño de fuente */
+          transition: 0.3s;                    /* Animación suave */
+          display: inline-block;
+          }
+         /* Efecto al pasar el ratón (se pone dorado/blanco para resaltar) */
+         .terminal-btn:hover {
+         background-color: #cc2900;           /* Un rojo más oscuro al pasar el ratón */
+         border-color: var(--gold);           /* Borde dorado al pasar el ratón */
+         color: #ffffff !important;
+         }
+
+         /* Estilo para el botón cuando está activo */
+         .nav-item.active {
+          box-shadow: 0 0 10px rgba(255, 51, 0, 0.5); /* Brillo rojo suave */
+          border: 1px solid var(--gold);              /* Borde dorado resaltado */
+          }
+
+          /* OPTIMIZACIÓN PARA MÓVILES */
+          @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                padding: 15px;
+                text-align: center;
+            }
+            .nav-links {
+                margin-left: 0;
+                justify-content: center;
+                flex-wrap: wrap;
+                margin-top: 10px;
+            }
+            .main-frame {
+                flex-direction: column;
+            }
+            .sidebar-right {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid var(--border);
+            }
+            .modal-content {
+                flex-direction: column;
+                width: 95%;
+                padding: 20px;
+                margin-top: 20px;
+            }
+            .modal-img-side img {
+                max-width: 100%;
+                margin-bottom: 20px;
+            }
+            #v-title {
+                font-size: 1.8rem;
+            }
+            .articles-grid {
+                grid-template-columns: 1fr; /* Una columna en móvil */
+            }
+        }
+
+
     </style>
 </head>
 <body>
-<header class="header-top">
-    <h1 class="brand-title" style="margin:0; padding:0; display:inline-block;">CRIPTONEURA</h1>
-    
-    <nav class="nav-links">
-        <a href="analisis.html" class="nav-item">ANÁLISIS</a>
-        <a href="opinion.html" class="nav-item">OPINIÓN</a>
-        <a href="index.html" class="nav-item active">TODO</a>
-    </nav>
-</header>
-
 <div class="main-frame">
     <main class="news-feed">
         <div class="articles-grid" id="articlesGrid"></div>
@@ -372,4 +440,5 @@
     window.onload = () => { renderArticles('all'); cargarNoticias(); setInterval(updateTimer, 1000); };
 </script>
 </body>
+<script src="noticias.js"></script>
 </html>
