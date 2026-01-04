@@ -14,7 +14,8 @@ window.datosCriptoneura = {
     alertaOro: "DEMANDA FÍSICA: Bancos centrales aumentan reservas en un 12%.",
     
     // Niveles de sentimiento (0 a 100)
-    nivelRiesgo: "35", 
+    nivelRiesgo: "80", 
     nivelMiedo: "42",  
     miedoAyer: "38"    
+
 };
