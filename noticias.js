@@ -1,21 +1,27 @@
-// noticias.js - ÚNICO CONTENIDO NECESARIO
+// noticias.js
 window.datosCriptoneura = {
-    tituloInforme: "INFORME ESTRATÉGICO: FASE DE ACUMULACIÓN",
-    textoInforme: "Los indicadores institucionales muestran una salida masiva de BTC de los exchanges hacia billeteras frías. La resistencia en los $94,000 se mantiene como el punto crítico para el siguiente rally.",
+    // --- NUEVOS CAMPOS PARA EL ANÁLISIS ---
+    tituloInforme: "INFORME ESTRATÉGICO: MOVIMIENTOS ON-CHAIN",
+    textoInforme: "ALERTA: Se detecta reactivación de ballenas de 2014. La correlación Plata/BTC sugiere un aumento de volatilidad en las próximas 48h. Vigilancia en niveles de $92k.",
     
-    // Indicadores numéricos
-    ratioOroPlata: "84.1",
-    dxyDolar: "102.5",
-    dominanciaBTC: "56.2%",
-    hashrate: "650 EH/s",
+    // --- DATOS MACRO ---
+    dominanciaBTC: "52.8%",
+    hashrate: "645 EH/s",
+    dxy: "102.50",
     
-    // Alertas de última hora
-    alertaBallena: "MOVIMIENTO DETECTADO: 4,500 BTC movidos a custodia institucional.",
-    alertaOro: "DEMANDA FÍSICA: Bancos centrales aumentan reservas en un 12%.",
-    
-    // Niveles de sentimiento (0 a 100)
-    nivelRiesgo: "80", 
-    nivelMiedo: "42",  
-    miedoAyer: "38"    
-
+    // --- ALERTAS PARA EL CUADRO SUPERIOR ---
+    eventosPosibles: [
+        {
+            resumen: "ALERTA: +2.500 BTC movidos a Coinbase",
+            detalle: "Movimiento detectado desde Wallet desconocida. Históricamente, estas entradas preceden a una lateralización del precio."
+        },
+        {
+            resumen: "INFO: Retiro masivo de 10.000 ETH de Binance",
+            detalle: "Las ballenas están retirando fondos a carteras frías. Esto reduce la oferta disponible y es una señal alcista a medio plazo."
+        },
+        {
+            resumen: "SISTEMA: Liquidación masiva en cortos ($45M)",
+            detalle: "Un movimiento rápido del precio ha barrido las posiciones apalancadas en el nivel de los $94,500."
+        }
+    ]
 };
